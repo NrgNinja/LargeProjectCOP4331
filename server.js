@@ -141,7 +141,7 @@ app.post('/api/addcard', async (req, res, next) =>
   try
   {
     const db = client.db('CardDatabase');
-    const result = db.collection('Cards').insertOne(newCard);
+    const result = db.collection('NewCards').insertOne(newCard);
   }
   catch(e)
   {
@@ -194,7 +194,7 @@ app.post('/api/searchcards', async (req, res, next) =>
   var _search = search.trim();
   
   const db = client.db('CardDatabase');
-  const results = await db.collection('Cards').find({"Card":{$regex:_search+'.*', $options:'r'}}).toArray();
+  const results = await db.collection('NewCards').find({"Card":{$regex:_search+'.*', $options:'r'}}).toArray();
   
   var _ret = [];
   for( var i=0; i<results.length; i++ )
