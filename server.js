@@ -10,11 +10,11 @@ const app = express();
 
 app.set('port', (process.env.PORT || 5000));
 
-require('dotenv').config();
-const url = process.env.MONGODB_URI;
-const MongoClient = require('mongodb').MongoClient;
-const client = new MongoClient(url);
-client.connect();
+// require('dotenv').config();
+// const url = process.env.MONGODB_URI;
+// const MongoClient = require('mongodb').MongoClient;
+// const client = new MongoClient(url);
+// client.connect();
 
 
 app.use(cors());
@@ -232,8 +232,8 @@ app.listen(PORT, () =>
   console.log('Server listening on port ' + PORT);
 });
 
-// const url = 'mongodb+srv://renatod621:<password>@carddatabase.sarptko.mongodb.net/?retryWrites=true&w=majority';
-//   const MongoClient = require("mongodb").MongoClient;
-//   const client = new MongoClient(url);
-//   client.connect(console.log("mongodb connected"));
+const url = 'mongodb+srv://renatod621:<password>@carddatabase.sarptko.mongodb.net/?retryWrites=true&w=majority';
+  const MongoClient = require("mongodb").MongoClient;
+  const client = new MongoClient(url);
+  client.connect(console.log("mongodb connected"));
 
