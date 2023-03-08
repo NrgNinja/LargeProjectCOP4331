@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 
 function CardUI() {
-    const app_name = 'cop4331-cards-app'
-    function buildPath(route) {
-        if (process.env.NODE_ENV === 'production') {
-            return 'https://' + app_name + '.herokuapp.com/' + route;
-        }
-        else {
-            return 'http://localhost:5000/' + route;
-        }
-    }
+    let bp = require('./Path.js');
 
-    var card = '';
-    var search = '';
+    // const app_name = 'cop4331-cards-app'
+    // function buildPath(route) {
+    //     if (process.env.NODE_ENV === 'production') {
+    //         return 'https://' + app_name + '.herokuapp.com/' + route;
+    //     }
+    //     else {
+    //         return 'http://localhost:5000/' + route;
+    //     }
+    // }
+
+    let card = '';
+    let search = '';
 
     const [message, setMessage] = useState('');
     const [searchResults, setResults] = useState('');
@@ -24,14 +26,20 @@ function CardUI() {
     let firstName = ud.firstName;
     let lastName = ud.lastName;
 
+    var storage = require('../tokenStorage.js');
+
     const addCard = async event => {
         event.preventDefault();
 
-        let obj = { userId: userId, card: card.value };
-        let js = JSON.stringify(obj);
+        // let obj = { userId: userId, card: card.value };
+        // let js = JSON.stringify(obj);
+
+        var tok = storage.retrieveToken();
+        var obj = {userId:userId, card:card.value, jwtToken:tok};
+        var js = JSON.stringify(obj);
 
         try {
-            const response = await fetch(buildPath('api/addcard'),
+            const response = await fetch(bp.buildPath('api/addcard'),
                 { method: 'POST', body: js, headers: { 'Content-Type': 'application/json' } });
 
             let txt = await response.text();
@@ -42,6 +50,7 @@ function CardUI() {
             }
             else {
                 setMessage('Card has been added');
+                storage.storeToken(res);
             }
         }
         catch (e) {
@@ -53,11 +62,15 @@ function CardUI() {
     const searchCard = async event => {
         event.preventDefault();
 
-        let obj = { userId: userId, search: search.value };
-        let js = JSON.stringify(obj);
+        // let obj = { userId: userId, search: search.value };
+        // let js = JSON.stringify(obj);
+
+        var tok = storage.retrieveToken();
+        var obj = {userId:userId, search:search.value, jwtToken:tok};
+        var js = JSON.stringify(obj);
 
         try {
-            const response = await fetch(buildPath('api/searchcards'),
+            const response = await fetch(bp.buildPath('api/searchcards'),
                 { method: 'POST', body: js, headers: { 'Content-Type': 'application/json' } });
 
             let txt = await response.text();
@@ -72,6 +85,7 @@ function CardUI() {
             }
             setResults('Card(s) have been retrieved');
             setCardList(resultText);
+            storage.storeToken(res);
         }
         catch (e) {
             alert(e.toString());
